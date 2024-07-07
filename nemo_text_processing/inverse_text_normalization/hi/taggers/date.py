@@ -202,3 +202,5 @@ class DateFst(GraphFst):
         final_graph += pynutil.insert(" preserve_order: true")
         final_graph = self.add_tokens(final_graph)
         self.fst = final_graph.optimize()
+#date to be the next semiotic class to be developed
+#date = DateFst()
