@@ -47,3 +47,5 @@ class CardinalFst(GraphFst):
         graph = optional_sign + graph
         delete_tokens = self.delete_tokens(graph)
         self.fst = delete_tokens.optimize()
+        
+cardinal = CardinalFst()

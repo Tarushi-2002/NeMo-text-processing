@@ -57,3 +57,6 @@ class OrdinalFst(GraphFst):
         graph = graph @ suffix
         delete_tokens = self.delete_tokens(graph)
         self.fst = delete_tokens.optimize()
+
+cardinal = CardinalFst()
+ordinal = OrdinalFst(cardinal)
