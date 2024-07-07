@@ -57,3 +57,4 @@ class OrdinalFst(GraphFst):
 
 cardinal = CardinalFst()
 ordinal = OrdinalFst(cardinal)
+decimal = DecimalFst()
