@@ -18,45 +18,39 @@ from pynini.lib import pynutil
 from nemo_text_processing.text_normalization.en.graph_utils import NEMO_NOT_QUOTE, GraphFst, delete_space
 
 
-class DecimalFst(GraphFst):
+class ElectronicFst(GraphFst):
     """
-    Finite state transducer for verbalizing decimal, e.g.
-        decimal { negative: "true" integer_part: "12"  fractional_part: "5006" quantity: "billion" } -> -12.5006 billion
+    Finite state transducer for verbalizing electronic
+        e.g. tokens { electronic { username: "cdf1" domain: "abc.edu" } } -> cdf1@abc.edu
     """
 
     def __init__(self):
-        super().__init__(name="decimal", kind="verbalize")
-        optionl_sign = pynini.closure(pynini.cross("negative: \"true\"", "-") + delete_space, 0, 1)
-        integer = (
-            pynutil.delete("integer_part:")
+        super().__init__(name="electronic", kind="verbalize")
+        user_name = (
+            pynutil.delete("username:")
             + delete_space
             + pynutil.delete("\"")
             + pynini.closure(NEMO_NOT_QUOTE, 1)
             + pynutil.delete("\"")
         )
-        optional_integer = pynini.closure(integer + delete_space, 0, 1)
-        fractional = (
-            pynutil.insert(".")
-            + pynutil.delete("fractional_part:")
+        domain = (
+            pynutil.delete("domain:")
             + delete_space
             + pynutil.delete("\"")
             + pynini.closure(NEMO_NOT_QUOTE, 1)
             + pynutil.delete("\"")
         )
-        optional_fractional = pynini.closure(fractional + delete_space, 0, 1)
-        quantity = (
-            pynutil.delete("quantity:")
+
+        protocol = (
+            pynutil.delete("protocol:")
             + delete_space
             + pynutil.delete("\"")
             + pynini.closure(NEMO_NOT_QUOTE, 1)
             + pynutil.delete("\"")
         )
-        optional_quantity = pynini.closure(pynutil.insert(" ") + quantity + delete_space, 0, 1)
-        graph = optional_integer + optional_fractional + optional_quantity
-        self.numbers = graph
-        graph = optionl_sign + graph
+
+        graph = user_name + delete_space + pynutil.insert("@") + domain
+        graph |= protocol
+
         delete_tokens = self.delete_tokens(graph)
         self.fst = delete_tokens.optimize()
-
-cardinal = CardinalFst()
-decimal = DecimalFst(cardinal)
