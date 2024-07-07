@@ -125,3 +125,6 @@ class DecimalFst(GraphFst):
             final_graph = capitalized_input_graph(final_graph)
         final_graph = self.add_tokens(final_graph)
         self.fst = final_graph.optimize()
+
+cardinal = CardinalFst()
+decimal = DecimalFst(cardinal)

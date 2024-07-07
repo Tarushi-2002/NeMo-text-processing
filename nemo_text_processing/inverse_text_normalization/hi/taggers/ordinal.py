@@ -54,3 +54,6 @@ class OrdinalFst(GraphFst):
         final_graph = pynutil.insert("integer: \"") + self.graph + pynutil.insert("\"")
         final_graph = self.add_tokens(final_graph)
         self.fst = final_graph.optimize()
+
+cardinal = CardinalFst()
+ordinal = OrdinalFst(cardinal)
